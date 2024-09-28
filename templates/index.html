@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDS Project</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ids.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Intrusion Detection System</h1>
+  </header>
+
+  <section class="main">
+    <form id="inputForm" method="post" action="/predict">
+      <label for="inputData">Enter network data:</label>
+      <textarea id="inputData" name="inputData" rows="10" placeholder="Enter space-separated float data for intrusion detection..."></textarea>
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="outputResult">
+      <h2>Prediction Result</h2>
+      <p id="result"></p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made by Prajwal</p>
+  </footer>
+
+  <script>
+    document.getElementById('inputForm').onsubmit = async function(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const inputData = formData.get('inputData');
+      
+      const response = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        document.getElementById('result').textContent = `Prediction: ${result.prediction}`;
+      } else {
+        document.getElementById('result').textContent = `Error: ${result.error}`;
+      }
+    };
+  </script>
+
+</body>
+</html>
