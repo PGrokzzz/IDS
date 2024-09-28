@@ -89,7 +89,7 @@ app = Flask(__name__)
 model = train_model()  # Call the function to get the trained model
 
 # Read CSV dataset once during app initialization
-df = pd.read_csv(r"C:\Users\athar\Downloads\sampled_1000_values.csv")  # Update as necessary
+df = pd.read_csv(r"sampled_1000_values.csv")  # Update as necessary
 
 @app.route('/')
 def home():
