@@ -15,17 +15,17 @@
     <!-- First form -->
     <form id="testForm">
       <label for="additionalInfo"> Enter network data:</label>
-      <textarea id="additionalInfo" name="additionalInfo" rows="5" placeholder="Enter IP information..."></textarea>
-      <button type="submit">Test</button>
+      <textarea id="additionalInfo" name="additionalInfo" rows="5" placeholder="Enter data..."></textarea>
+      <button type="submit">Upload The Dataset</button>
     </form>
 
     <!-- Processing message -->
-    <p id="processingMessage">Loading the Dataset...</p>
+    <p id="processingMessage">Updating the Dataset...</p>
 
     <!-- Second form -->
     <form id="inputForm" method="post" action="/predict">
       <label for="inputData">Enter IP information:</label>
-      <textarea id="inputData" name="inputData" rows="10" placeholder="Enter space-separated float data for intrusion detection..."></textarea>
+      <textarea id="inputData" name="inputData" rows="10" placeholder="Enter IP information..."></textarea>
       <button type="submit">Submit</button>
     </form>
 
@@ -53,7 +53,33 @@
         // Hide the processing message after 3 seconds (you can adjust this)
         document.getElementById('processingMessage').style.display = 'none';
         // You can also add further actions here (like sending form data to the server)
-      }, 3000);
+      }, 20000);
+    });
+
+    // Handle the second form (inputForm) using AJAX for the prediction
+    document.getElementById('inputForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      // Get the input data from the form
+      const inputData = document.getElementById('inputData').value;
+
+      // Make an AJAX request to the /predict endpoint
+      fetch('/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({ 'inputData': inputData }),
+      })
+      .then(response => response.json())  // Parse the JSON response
+      .then(data => {
+        // Update the result with the prediction
+        document.getElementById('result').innerText = data.prediction ? data.prediction : "Error in prediction";
+      })
+      .catch(error => {
+        // Handle any errors
+        document.getElementById('result').innerText = "An error occurred: " + error;
+      });
     });
   </script>
 </body>
