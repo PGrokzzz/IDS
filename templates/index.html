@@ -12,12 +12,24 @@
   </header>
 
   <section class="main">
+    <!-- First form -->
+    <form id="testForm">
+      <label for="additionalInfo"> Enter network data:</label>
+      <textarea id="additionalInfo" name="additionalInfo" rows="5" placeholder="Enter IP information..."></textarea>
+      <button type="submit">Test</button>
+    </form>
+
+    <!-- Processing message -->
+    <p id="processingMessage">Loading the Dataset...</p>
+
+    <!-- Second form -->
     <form id="inputForm" method="post" action="/predict">
-      <label for="inputData">Enter network data:</label>
+      <label for="inputData">Enter IP information:</label>
       <textarea id="inputData" name="inputData" rows="10" placeholder="Enter space-separated float data for intrusion detection..."></textarea>
       <button type="submit">Submit</button>
     </form>
 
+    <!-- Result output -->
     <div id="outputResult">
       <h2>Prediction Result</h2>
       <p id="result"></p>
@@ -29,24 +41,20 @@
   </footer>
 
   <script>
-    document.getElementById('inputForm').onsubmit = async function(event) {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const inputData = formData.get('inputData');
-      
-      const response = await fetch('/predict', {
-        method: 'POST',
-        body: formData
-      });
+    
+    // Add event listener to the "Test" form
+    document.getElementById('testForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevents form from submitting
+      // Show the "Data is processing" message
+      document.getElementById('processingMessage').style.display = 'block';
 
-      const result = await response.json();
-      if (response.ok) {
-        document.getElementById('result').textContent = `Prediction: ${result.prediction}`;
-      } else {
-        document.getElementById('result').textContent = `Error: ${result.error}`;
-      }
-    };
+      // Simulate processing delay
+      setTimeout(function() {
+        // Hide the processing message after 3 seconds (you can adjust this)
+        document.getElementById('processingMessage').style.display = 'none';
+        // You can also add further actions here (like sending form data to the server)
+      }, 3000);
+    });
   </script>
-
 </body>
 </html>
