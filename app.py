@@ -128,3 +128,56 @@ def predict():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# Define preprocessing function according to the dataset
+def preprocess_input_data(data):
+    """
+    Preprocess the input data to match the format used in training.
+    You can include encoding for categorical features or scaling as necessary.
+    """
+    # Example of basic preprocessing: 
+    # Assuming Protocol and Info are categorical and need encoding, while Length is numerical
+    source, destination, protocol, length, info = data
+    
+    # Apply necessary transformations, like encoding or scaling
+    # For simplicity, this example assumes the model expects numerical data.
+    processed_data = [source, destination, protocol, length, info] # Adjust based on your preprocessing
+
+    return processed_data
+
+
+@app.route('/data_process', methods=['POST'])
+def data_process():
+    try:
+        # Extract the input data for each column
+        source = request.form['Source']
+        destination = request.form['Destination']
+        protocol = request.form['Protocol']
+        length = request.form['Length']
+        info = request.form['Info']
+
+        # Convert the input data to appropriate types
+        float_length = float(length) # Assuming Length is numerical
+        input_data = [source, destination, protocol, float_length, info] # Assemble the inputs
+        
+        # Preprocess the input data to match model requirements
+        processed_data = preprocess_input_data(input_data)
+
+        # Convert to numpy array and reshape if necessary
+        input_array = np.array(processed_data).reshape(1, -1)
+
+        # Make a prediction using the loaded model
+        prediction = model.predict(input_array)[0] # Modify based on model output (e.g., classification)
+
+        # Customize your prediction result mapping based on your dataset
+        result = "Malicious" if prediction == 1 else "Non Malicious"
+
+        return jsonify({'prediction': result})
+
+    except ValueError as e:
+        # Handle invalid input
+        return jsonify({'error': f"Invalid input: {str(e)}"}), 400
+
+    except Exception as e:
+        # Capture any other exceptions and return a message
+        return jsonify({'error': str(e)}), 400
