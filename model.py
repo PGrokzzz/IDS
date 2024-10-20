@@ -6,7 +6,6 @@
 
 # def train_model():
 #     # Load the dataset
-#     data = pd.read_csv('sampled_1000_values.csv')
 
 #     # Preprocess the data...
 #     if 'Malicious' not in data.columns:
