@@ -9,7 +9,7 @@
 # model, label_encoders = train_model()  # Unpack the function to get the trained model and encoders
 
 # # Read CSV dataset once during app initialization
-# df = pd.read_csv(r"C:\Users\athar\Downloads\sampled_1000_values.csv")  # Update as necessary
+
 
 # @app.route('/')
 # def home():
@@ -89,7 +89,7 @@ app = Flask(__name__)
 model = train_model()  # Call the function to get the trained model
 
 # Read CSV dataset once during app initialization
-df = pd.read_csv(r"sampled_1000_values.csv")  # Update as necessary
+
 
 @app.route('/')
 def home():
@@ -126,8 +126,7 @@ def predict():
 
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
 
 # Define preprocessing function according to the dataset
 def preprocess_input_data(data):
@@ -181,3 +180,6 @@ def data_process():
     except Exception as e:
         # Capture any other exceptions and return a message
         return jsonify({'error': str(e)}), 400
+   
+if __name__ == "__main__":
+    app.run(debug=True)
